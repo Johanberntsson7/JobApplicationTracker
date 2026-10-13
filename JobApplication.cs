@@ -7,22 +7,22 @@ namespace JobApplicationTracker
     public class JobApplication
     {       
         // Attributer
-        public string CompanyName { get; set; } = string.Empty; 
-        public string PositionTitle { get; set; } = string.Empty;
+        public string CompanyName { get; set; } 
+        public string PositionTitle { get; set; } 
         public DateTime ApplicationDate { get; set; }
         public ApplicationStatus Status { get; set; }
         public DateTime ResponseDate { get; set; }
-        public int SalaryExpectation {get; set; }
+        public int SalaryExpectation {get; set; } 
 
             // Metoder 
-        public int GetDaysSinceApplied()
+         public int GetDaysSinceApplied()
         {
-            return (DateTime.Today - ApplicationDate).Days;
-        }
+             return (DateTime.Today - ApplicationDate).Days;
+         }
 
-        public string GetSummary()
-        {
-            return $"{CompanyName} - {PositionTitle} (Applied: {ApplicationDate:yyyy-MM-dd})";
-        }
+         public string GetSummary()
+         {
+             return $"{CompanyName} - {PositionTitle} (Applied: {ApplicationDate:yyyy-MM-dd})";
+         }
     }
 }  
