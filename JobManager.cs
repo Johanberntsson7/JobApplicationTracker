@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Microsoft.VisualBasic;
 
 namespace JobApplicationTracker
 { 
@@ -85,9 +86,8 @@ namespace JobApplicationTracker
             }
             ApplicationStatus status = (ApplicationStatus)statusNumber;
 
-            // Filtrera listan så bara ansökningar med den statusen finns kvar
-            var sortedlist = Application.Where(app => app.Status == status).ToList();
-            // Om resultatet är tomt:
+            List<JobApplication> sortedlist = Application.Where(app => app.Status == status).ToList();
+            
             if(sortedlist.Count == 0)
             {
                 Console.WriteLine("No application found");
@@ -98,12 +98,21 @@ namespace JobApplicationTracker
                 Console.WriteLine(application.GetSummary());
             }
             
-            
-            // Annars:
-            // för varje ansökan i resultatet:
-            // skriv ut sammanfattningen
-            
         }   
+
+        public void sortedbydate()
+        {
+            List<JobApplication> sortedbydate = Application.OrderBy(a => a.ApplicationDate).ToList();
+            if(sortedbydate.Count == 0)
+            {
+                Console.WriteLine("No application in the list");
+                return;
+            }
+            foreach (var application in sortedbydate)
+            {
+                Console.WriteLine(application.GetSummary());
+            }
+        }
 
 
 
@@ -122,24 +131,58 @@ namespace JobApplicationTracker
             {
                 Console.WriteLine("----Statictics----");
                 Console.WriteLine($"Total: {Application.Count}");
+
+                bool hasResponse = Application.Any(a => a.ResponseDate != default);
+                if (hasResponse)
+                {
+                    double averageResponse = Application
+                        .Where(a => a.ResponseDate != default)
+                        .Average(a => (a.ResponseDate!.Value - a.ApplicationDate).TotalDays);
+                    Console.WriteLine($"Average response time: {averageResponse:F1} days");
+                }
+                else
+                {
+                    Console.WriteLine("No response yet");
+                }
+
                 int applied = Application.Count(app => app.Status == ApplicationStatus.Applied);
                 int interview = Application.Count(app => app.Status == ApplicationStatus.Interview);
                 int offer = Application.Count(app => app.Status == ApplicationStatus.Offer);
-                int salaryexpectation = Application.Count(app => app.Status == ApplicationStatus.Salary);
                 int rejected = Application.Count(app => app.Status == ApplicationStatus.Rejected);
                 
 
                 Console.WriteLine($"Applied: {applied}");
                 Console.WriteLine($"Intervieved: {interview}");
                 Console.WriteLine($"Offer: {offer}");
-                Console.WriteLine($"SalarExpectation: {salaryexpectation}");
                 Console.WriteLine($"Rejected: {rejected}");
-                
-            }  
-            
-            
+            }
         }
+
+        public void RemoveJobApplication()
+        {
+            // vill kunna ta bort jobapplication
+            if (Application.Count == 0)
+            {
+                Console.WriteLine("No applications found");
+                return;
+            }
+
+            Console.WriteLine("Enter company name to remove:");
+            string companyName = Console.ReadLine()!;
+
+            JobApplication? applicationToRemove = Application
+                .FirstOrDefault(app => app.CompanyName!.Equals(companyName, StringComparison.OrdinalIgnoreCase));
+
+            if (applicationToRemove == null)
+            {
+                Console.WriteLine("No matching application found");
+                return;
+            }
+
+            Application.Remove(applicationToRemove);
+            Console.WriteLine("Job application removed");
         }
+    }
 }
 
 
