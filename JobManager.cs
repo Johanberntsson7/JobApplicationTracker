@@ -36,7 +36,7 @@ namespace JobApplicationTracker
             SalaryExpectation = salaryexpectation,
         };
         Application.Add(newapplication);
-        Console.WriteLine("Job added");
+        Console.WriteLine("Job has been added!");
         
         
     }
@@ -45,9 +45,35 @@ namespace JobApplicationTracker
     public void UpdateStatus()
     {
         if (Application.Count == 0)
-            {
-                Console.WriteLine("No applications found");
-            }
+        {
+            Console.WriteLine("No applications found");
+            return;
+        }
+            Console.Clear();
+        for (int i = 0; i < Application.Count; i++)
+        {
+            Console.Write($"{i + 1}. ");
+            PrintColored(Application[i]);
+        }
+            
+        Console.WriteLine("Choose an application number:");
+        if (!int.TryParse(Console.ReadLine(), out int applicationNumber) ||
+            applicationNumber < 1 || applicationNumber > Application.Count)
+        {
+            Console.WriteLine("Choose a valid application number");
+            return;
+        }
+
+        Console.WriteLine("New status: 1: Applied 2: Interview 3: Offer 4: Rejected");
+        if (!int.TryParse(Console.ReadLine(), out int statusNumber) || statusNumber < 1 || statusNumber > 4)
+        {
+            Console.WriteLine("Choose an option (1-4)");
+            return;
+        }
+
+        Application[applicationNumber - 1].Status = (ApplicationStatus)statusNumber;
+        Console.WriteLine("Application status updated");
+        
     }
 
     // ShowAll() – visar alla ansökningar
@@ -160,7 +186,6 @@ namespace JobApplicationTracker
 
         public void RemoveJobApplication()
         {
-            // vill kunna ta bort jobapplication
             if (Application.Count == 0)
             {
                 Console.WriteLine("No applications found");
@@ -181,6 +206,27 @@ namespace JobApplicationTracker
 
             Application.Remove(applicationToRemove);
             Console.WriteLine("Job application removed");
+        }
+        private void PrintColored(JobApplication application)
+        {       
+            if(application.Status == ApplicationStatus.Applied)
+            {
+                Console.ForegroundColor = ConsoleColor.Gray;
+            }
+            else if (application.Status == ApplicationStatus.Interview)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            }
+            else if (application.Status == ApplicationStatus.Offer)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            else if (application.Status == ApplicationStatus.Rejected)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+            }
+                Console.WriteLine(application.GetSummary());
+                Console.ResetColor();
         }
     }
 }
