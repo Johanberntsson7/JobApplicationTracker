@@ -1,1 +1,3 @@
-1. 
+1. LINQ för mig gjorde de lättare att förstå koden, samt att det blir mycket mindre kod att skriva,
+   LINQ gör att de känns som de kan bli mindre fel i koden eftersom man skriver mindre kod :)
+   2. Det som jag upplevde var svårast var hur och när jag skulle använda LINQ, men med hjälp av claude så löste jag det.
