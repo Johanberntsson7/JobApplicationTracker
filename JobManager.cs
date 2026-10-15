@@ -3,7 +3,6 @@ using Microsoft.VisualBasic;
 
 namespace JobApplicationTracker
 { 
-
     public class JobManager
     {   
     // skapar listan från JobApplication klass in i JobManager
@@ -49,11 +48,13 @@ namespace JobApplicationTracker
             Console.WriteLine("No applications found");
             return;
         }
-            Console.Clear();
+            
         for (int i = 0; i < Application.Count; i++)
         {
-            Console.Write($"{i + 1}. ");
             PrintColored(Application[i]);
+            Console.WriteLine($"{i + 1}. {Application[i].GetSummary()}" );
+            Console.ResetColor();
+            
         }
             
         Console.WriteLine("Choose an application number:");
@@ -71,7 +72,8 @@ namespace JobApplicationTracker
             return;
         }
 
-        Application[applicationNumber - 1].Status = (ApplicationStatus)statusNumber;
+        Application[applicationNumber - 1].Status = (ApplicationStatus)statusNumber; // tog hjälp av claude.
+        Application[applicationNumber - 1].ResponseDate = DateTime.Today; // samma här 
         Console.WriteLine("Application status updated");
         
     }
@@ -89,8 +91,10 @@ namespace JobApplicationTracker
             
             foreach(var application in sortedby)
             {
+                PrintColored(application);
                 Console.WriteLine(application.GetSummary());
                 Console.WriteLine($"{application.GetDaysSinceApplied()} days since applied ");
+                Console.ResetColor();
                 
             }
             
@@ -121,7 +125,9 @@ namespace JobApplicationTracker
             }
             foreach (var application in sortedlist)
             {
+                PrintColored(application);
                 Console.WriteLine(application.GetSummary());
+                Console.ResetColor();
             }
             
         }   
@@ -136,15 +142,12 @@ namespace JobApplicationTracker
             }
             foreach (var application in sortedbydate)
             {
+                PrintColored(application);
                 Console.WriteLine(application.GetSummary());
+                Console.ResetColor();
             }
         }
 
-
-
-            
-            
-        
     // ShowStatistics() – visar statistik med LINQ (Count, Average, OrderBy, Where) (VG del)
     public void ShowStatistics()
         {
@@ -225,10 +228,8 @@ namespace JobApplicationTracker
             {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
-                Console.WriteLine(application.GetSummary());
-                Console.ResetColor();
+                
+                
         }
     }
 }
-
-
