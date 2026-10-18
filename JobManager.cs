@@ -227,8 +227,10 @@ namespace JobApplicationTracker
         }
 
         // RemoveJobApplication() – tar bort en ansökan baserat på företagsnamn
+
         public void RemoveJobApplication()
         {
+            List<JobApplication> removejob = Application.OrderBy(a => a.ApplicationDate).ToList();
 
             // Avbryt om det inte finns några ansökningar
             if (Application.Count == 0)
@@ -238,6 +240,8 @@ namespace JobApplicationTracker
             }
 
             // Användaren skriver namnet på företaget som ska tas bort
+            foreach (var application in removejob )
+            Console.WriteLine(application.GetSummary());
             Console.WriteLine("Enter company name to remove:");
             string companyName = Console.ReadLine()!;
 
@@ -257,7 +261,10 @@ namespace JobApplicationTracker
 
             // Tar bort ansökan ur listan
             Application.Remove(applicationToRemove);
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Job application removed");
+            Console.ResetColor();
+            
         }
 
 
